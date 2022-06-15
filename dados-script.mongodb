@@ -1,0 +1,93 @@
+show collections;
+
+db.filme.find()
+
+db.filme.find({
+    data: '2021-07-08'
+})
+
+//posso usar o comando $gt <INT> para buscar valores maiores que o parametro
+/* Exemplo de Uso
+db.livros.find({
+    ano: { '$gt' : 2015 }
+})
+*/
+//$gte para valores maiores ou iguais ao parametro
+//$lt para valores menores que o parametro
+//$lte para valores menores ou iguais ao parametro
+
+//podemos tambem utilizar um filtro e limitar os campos exibidos
+/* Exemplo de Uso
+
+db.livros.find({
+    ano: { '$gt' : 2015 }
+},{ //apenas id e nome
+    nome:1 
+})
+
+db.livros.find({
+    ano: { '$gt' : 2015 }
+},{ //apenas nome
+   _id: 0, nome: 1 
+})
+
+db.livros.find({
+    ano: { '$gt' : 2015 }
+},{ //apenas nome e ano
+   _id: 0, nome: 1, ano: 1
+})
+
+db.livros.find({
+    ano: { '$gt' : 2015 }
+},{ //tudo exeto o id
+   _id: 0
+})
+*/
+
+//ordenação
+/* Exemplo de Uso
+
+db.livros.find({
+    ano: { '$gt' : 2015 } },
+    { nome:1 }
+)//campo 1 significa ordem crescente
+.sort({nome: 1})
+
+db.livros.find({
+    ano: { '$gt' : 2015 } },
+    { nome:1 }
+)//campo -1 significa ordem decrescente
+.sort({nome: -1})
+
+db.livros.find({
+    ano: { '$gt' : 2015 } },
+    { nome:1 }
+)//podemos tambem usar dois campos, inicialmente ele segue o primeiro campo depois o segundo 
+//Exemplo dois dados com editoras iguais esses serão exibidos na ordem crescente nesse caso
+.sort({editora: 1 , nome: 1})
+*/
+
+//agregation
+/* Exemplo de Uso
+agregation monta uma sequencia de passo onde eu passo um objeto e recebo um resultado e usando 
+esse retorno podemos fazer uma certa etapa por exemplo um filtro
+
+como ele usa diversos passos nos passamos um array de objetos
+db.livros.aggregate([
+    //como os passos não são fixos então devemos informar o que queremos que seja executado
+    //nesse caso um filtro
+    { '$match' : {ano: { '$gt' : 2015 } }}}
+])
+
+db.livros.aggregate([
+    //Filtro
+    { '$match' : {ano: { '$gt' : 2015 } } },
+    //Projeção (Campos que serão mostrado)
+    { '$project' : { _id:0 } },
+    //Agrupamento Precisamos usar o '$' antes do campo para que ela seja entendida
+    //sum é o equivalente ao count
+    { '$group' : { _id: '$editora' , qtd: {'$sum' : 1} } }
+    //Ordenação nesse caso o id é a editora por que quando uma operação é realizada no agregate
+    //o que foi cortado não existe mais isso é o que significa ele trabalhar com o retorno das operações
+    { '$sort' : { _id: 1 }}
+])

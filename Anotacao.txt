@@ -1,0 +1,68 @@
+//Conecta com Banco
+C:\Users\rufin>mongosh "mongodb+srv://FeBs:Br@1568@cluster0.qtdeh.mongodb.net/myFirstDatabase"
+Current Mongosh Log ID: 62aa16ecc7debf07c099e011
+Connecting to:          mongodb+srv://<credentials>@cluster0.qtdeh.mongodb.net/myFirstDatabase
+Using MongoDB:          5.0.9
+Using Mongosh Beta:     0.15.5
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+Enterprise atlas-bvk247-shard-0 [primary] myFirstDatabase> show databases
+admin   295 kB
+local  1.49 GB
+
+//Seleciona Banco
+
+Enterprise atlas-bvk247-shard-0 [primary] myFirstDatabase> use teste
+switched to db teste
+
+//Mostra Tabelas
+Enterprise atlas-bvk247-shard-0 [primary] teste> show collections
+
+
+//Inserir
+Enterprise atlas-bvk247-shard-0 [primary] teste> db.dados.insertOne({ nome: 'Teste', telefone: '1159797941'})
+{
+  acknowledged: true,
+  insertedId: ObjectId("62aa177f63ce173223e7574b")
+}
+
+//Select
+Enterprise atlas-bvk247-shard-0 [primary] teste> db.dados.find()
+[
+  {
+    _id: ObjectId("62aa177f63ce173223e7574b"),
+    nome: 'Teste',
+    telefone: '1159797941'
+  }
+]
+
+//Select com Filtro
+Enterprise atlas-bvk247-shard-0 [primary] teste> db.dados.find({nome : 'Teste'})
+[
+  {
+    _id: ObjectId("62aa177f63ce173223e7574b"),
+    nome: 'Teste',
+    telefone: '1159797941'
+  }
+]
+
+//Atualizar
+Enterprise atlas-bvk247-shard-0 [primary] teste> db.dados.updateOne({_id: ObjectId("62aa177f63ce173223e7574b")},{$set: {nome: 'Teste1'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+//Deletar
+Enterprise atlas-bvk247-shard-0 [primary] teste> db.dados.deleteOne({_id: ObjectId("62aa17b763ce173223e7574c")})
+{ acknowledged: true, deletedCount: 1 }
+
+
+//Inserindo em massa com um json
+
+C:\Users\rufin\OneDrive\Área de Trabalho\Projetos\Projetos GIT\MongoDB-STD>mongoimport 
+"mongodb+srv://FeBs:BrDEV@cluster0.qtdeh.mongodb.net" --db=dados --collection=filme --file=Mortal-Kombat-sessao.json
